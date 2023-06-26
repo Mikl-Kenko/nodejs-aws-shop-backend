@@ -22,7 +22,7 @@ export class ImportServiceStack extends cdk.Stack {
       },
     };
 
-    const bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', process.env.BUCKET_NAME || '');
+    const bucket = s3.Bucket.fromBucketName(this, 'ImportedBucket', process.env.BUCKET_NAME!);
 
     const importProductsFile = new NodejsFunction(this, 'importProductsFile', {
       ...shared,
@@ -42,7 +42,7 @@ export class ImportServiceStack extends cdk.Stack {
 
     bucket.grantReadWrite(importFileParser);
 
-    bucket.addEventNotification(s3.EventType.OBJECT_CREATED_PUT, new s3Notifications.LambdaDestination(importFileParser), { prefix: 'uploaded' });
+    bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3Notifications.LambdaDestination(importFileParser), { prefix: 'uploaded' });
 
     const api = new apiGateway.HttpApi(this, 'ImportApi', {
       corsPreflight: {

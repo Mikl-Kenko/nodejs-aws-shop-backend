@@ -9,7 +9,7 @@ export async function importProductsFile(event: APIGatewayProxyEvent): Promise<A
     if (!fileName) {
       return {
         statusCode: 400,
-        body: JSON.stringify({errorMessage:'Please provide a file name.'}),
+        body: JSON.stringify({errorMessage:'Provide a file name.'}),
       };
     }
     const s3 = new S3Client({ region: process.env.AWS_REGION });
@@ -22,13 +22,18 @@ export async function importProductsFile(event: APIGatewayProxyEvent): Promise<A
     const command = new GetObjectCommand(params);
     const url = await getSignedUrl(s3, command);
     return {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type':'text/csv'
+      },
       statusCode: 200,
       body: JSON.stringify(url),
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: 'Server Error' })
+      body: JSON.stringify({ message: 'Server Error!' })
     };
   }
 }
