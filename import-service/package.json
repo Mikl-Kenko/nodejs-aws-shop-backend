@@ -8,31 +8,30 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk",
-    "deploy": "npm run build && cdk deploy --profile aws-rs"
+    "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.115",
+    "@types/aws-lambda": "^8.10.119",
     "@types/jest": "^29.5.1",
     "@types/node": "20.1.7",
-    "aws-cdk": "2.83.1",
-    "aws-sdk-mock": "^5.8.0",
+    "aws-cdk": "2.81.0",
+    "aws-sdk-client-mock": "^2.1.1",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.0.4"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.353.0",
+    "@aws-sdk/s3-request-presigner": "^3.353.0",
+    "@t3-oss/env-core": "^0.4.0",
     "aws-cdk-lib": "2.81.0",
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1398.0",
     "constructs": "^10.0.0",
     "csv-parser": "^3.0.0",
-    "dotenv": "^16.1.4",
-    "path": "^0.12.7",
+    "dotenv": "^16.2.0",
     "source-map-support": "^0.5.21",
-    "@aws-cdk/aws-apigatewayv2-alpha": "2.81.0-alpha.0",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "2.81.0-alpha.0",
-    "@aws-sdk/client-s3": "^3.354.0",
-    "@aws-sdk/s3-request-presigner": "^3.354.0",
-    "aws-sdk-client-mock": "^2.1.1"
+    "zod": "^3.21.4"
   }
 }
