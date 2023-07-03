@@ -2,10 +2,11 @@ import {CopyObjectCommand,DeleteObjectCommand,GetObjectCommand,S3Client,} from "
 import { PassThrough, Readable } from "stream";
 import { S3Event } from "aws-lambda";
 import csv from "csv-parser";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { _response } from "../utils/response";
 import { _folders } from "../utils/const"
 
-
+const sqs = new SQSClient({ region: process.env.AWS_REGION });
 export const handler = async (event: S3Event) => {
   try {
     const records = event.Records;
@@ -23,8 +24,19 @@ export const handler = async (event: S3Event) => {
       body
         .pipe(new PassThrough())
         .pipe(csv())
-        .on("data", console.log)
-        .on("end", async () => {
+        .on("data", (record) => {
+          const message = JSON.stringify({
+            ...record,
+            price: Number(record.price),
+            count: Number(record.count),
+          });
+          sqs.send(
+            new SendMessageCommand({
+              QueueUrl: process.env.QUEUE_URL,
+              MessageBody: message,
+            })
+          );
+        })        .on("end", async () => {
           console.log("Finished reading");
 
           await s3.send(
